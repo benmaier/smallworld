@@ -7,6 +7,8 @@ from scipy.stats import binom
 
 from smallworld.tools import assert_parameters
 
+from scipy.linalg import circulant
+
 def binomial_mean(n, p):
     """Does what it says it does."""
     return n*p
@@ -160,3 +162,42 @@ def expected_number_of_unique_two_stars_per_node(N,k_over_2,beta):
     L2 = ((L-R)**2 - (L-R)) + (L-R)**2
  
     return S2 * pS**2 + SL * pS*pL + L2 * pL**2
+
+def get_effective_medium_eigenvalue_gap_from_matrix(N,k_over_2,beta):
+
+    assert_parameters(N,k_over_2,beta)
+
+    pS, pL = get_connection_probabilities(N,k_over_2,beta)
+
+    N = int(N)
+    k_over_2 = int(k_over_2)
+    k = int(2*k_over_2)
+
+
+    P = np.array([0.0] + [pS]*k_over_2 + [pL]*(N-1-k) + [pS]*k_over_2)
+    P = circulant(P) / k
+
+
+    omega = np.sort(np.linalg.eigvalsh(P))
+    omega_N_m_1 = omega[-2]
+
+    return 1-omega_N_m_1
+
+def get_effective_medium_eigenvalue_gap(N,k_over_2,beta):
+
+    if type(beta) == np.ndarray:
+        pS, pL = get_connection_probability_arrays(N, k_over_2, beta)
+    else:
+        pS, pL = get_connection_probabilities(N,k_over_2,beta)
+
+    N = int(N)
+    k = int(2*k_over_2)
+
+
+    j = 1.0 + np.arange(k_over_2)
+    C = 2 * np.cos(2.0*np.pi/N*j).sum()
+
+    omega_N_m_1 = pS/k * C - pL/k * (1+C)
+
+    return 1-omega_N_m_1
+
