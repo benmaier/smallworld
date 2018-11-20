@@ -5,12 +5,12 @@ from collections import Counter
 from smallworld import get_smallworld_graph
 from smallworld.theory import expected_number_of_unique_two_stars_per_node
 from smallworld.theory import expected_number_of_unique_triangles_per_node
-from smallworld.tools import get_number_of_unique_two_stars 
+from smallworld.tools import get_number_of_unique_two_stars_for_each_node 
 from smallworld.tools import get_number_of_unique_triangles_for_each_node 
 
 from time import time
 
-N = 15
+N = 21
 k_over_2 = 2
 
 betas = np.logspace(-3,0,10)
@@ -20,18 +20,24 @@ N_meas = 10000
 mean_two_stars = []
 mean_triangles = []
 
+
+start = time()
 for ib, beta in enumerate(betas):
     print(ib+1,"/",len(betas))
     two_stars = []
     triangles = []
     for meas in range(N_meas):
 
-        G = get_smallworld_graph(N, k_over_2, beta, use_slow_algorithm=False)
-        two_stars.extend(list(get_number_of_unique_two_stars(G)))
+        G = get_smallworld_graph(N, k_over_2, beta, use_slow_algorithm=False,verbose=False)
+        two_stars.extend(list(get_number_of_unique_two_stars_for_each_node(G)))
         triangles.extend(list(get_number_of_unique_triangles_for_each_node(G)))
 
     mean_two_stars.append(np.mean(two_stars))
     mean_triangles.append(np.mean(triangles))
+
+end = time()
+
+print("needed", (end-start) / len(betas), "s per beta")
 
 
 mean_two_stars = np.array(mean_two_stars)

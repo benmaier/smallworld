@@ -8,12 +8,15 @@ from scipy.stats import binom
 from smallworld.tools import assert_parameters
 
 def binomial_mean(n, p):
+    """Does what it says it does."""
     return n*p
 
 def binomial_variance(n, p):
+    """Does what it says it does."""
     return n*p*(1-p)
 
 def binomial_second_moment(n, p):
+    """Does what it says it does."""
     return binomial_variance(n, p) + binomial_mean(n, p)**2
 
 
@@ -82,6 +85,7 @@ def get_degree_distribution(N,k_over_2,beta,kmax=None):
             
 
 def get_degree_second_moment(N,k_over_2,beta):
+    """Does what it says it does."""
 
     assert_parameters(N,k_over_2,beta)
 
@@ -94,6 +98,7 @@ def get_degree_second_moment(N,k_over_2,beta):
            + 2 * binomial_mean(k, pS) * binomial_mean(N-1-k, pL)
 
 def get_degree_variance(N,k_over_2,beta):
+    """Does what it says it does."""
 
     assert_parameters(N,k_over_2,beta)
 
@@ -104,6 +109,7 @@ def get_degree_variance(N,k_over_2,beta):
 
 
 def expected_number_of_unique_triangles_per_node(N,k_over_2,beta):
+    """Does what it says it does. If `beta` is an array, returns an array. Only works for odd N."""
 
     if type(beta) == np.ndarray:
         pS, pL = get_connection_probability_arrays(N, k_over_2, beta)
@@ -133,6 +139,7 @@ def expected_number_of_unique_triangles_per_node(N,k_over_2,beta):
     return S3 * pS**3 + S2L * pS**2*pL + SL2 * pS*pL**2 + L3 * pL**3
 
 def expected_number_of_unique_two_stars_per_node(N,k_over_2,beta):
+    """Does what it says it does. If `beta` is an array, returns an array. Only works for odd N."""
 
     if type(beta) == np.ndarray:
         pS, pL = get_connection_probability_arrays(N, k_over_2, beta)
