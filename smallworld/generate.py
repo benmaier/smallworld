@@ -1,5 +1,5 @@
 """
-Generate small-world networks
+Generate small-world networks according to the model.
 """
 
 import networkx as nx
@@ -36,11 +36,11 @@ def get_fast_smallworld_graph(N, k_over_2, beta):
     for u in range(N):
         for v in range(u+1, u+k_over_2+1):
             if random.rand() < pS:
-                G.add_edge(sorted([u,v % N]))
+                G.add_edge(*sorted([u,v % N]))
 
     # sample number of long-range edges
     mL_max = N*(N-1-2*k_over_2) // 2
-    mL = random.binomial(mL_max, pL, 1)
+    mL = random.binomial(mL_max, pL)
 
     for m in range(mL):
         while True:
@@ -67,7 +67,7 @@ def get_smallworld_graph(N,k_over_2,beta,use_slow_algorithm=False,get_largest_co
 
         G.add_edges_from(get_edgelist_slow(N,k_over_2,beta))
     else:
-        G = get_fast_graph(N, k_over_2, beta)
+        G = get_fast_smallworld_graph(N, k_over_2, beta)
 
     if get_largest_component:
         G = _get_largest_component(G)
@@ -94,15 +94,14 @@ def get_edgelist_slow(N,k_over_2,beta):
         for j in range(i+1,N):
 
             distance = j - i
-            probability = pL
 
-            if (distance <= k_over_2) or ((N - distance) <= max_neighbor):
+            if (distance <= k_over_2) or ((N - distance) <= k_over_2):
                 p = pS
             else:
                 p = pL
 
-            if random.rand() < pL:
-                E.append((u,v))
+            if random.rand() < p:
+                E.append((i,j))
 
     return E
 

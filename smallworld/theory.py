@@ -31,6 +31,24 @@ def get_connection_probabilities(N,k_over_2,beta):
 
     return pS, pL
 
+def get_connection_probability_arrays(N, k_over_2, beta):
+    """
+    Return the connection probabilities :math:`p_S` and :math:`p_L`
+    but for beta being a `numpy.ndarray`.
+    """
+    assert_parameters(N,k_over_2,0.0)
+
+    assert(np.all(beta>=0.0))
+    assert(np.all(beta<=1.0))
+
+    k = float(int(k_over_2 * 2))
+
+    pS = k / (k + beta*(N-1.0-k))
+    pL = k * beta / (k + beta*(N-1.0-k))
+
+    return pS, pL
+
+
 def get_degree_distribution(N,k_over_2,beta,kmax=None):
     """
     Return degrees `k` and corresponding probabilities math:`P_k`
@@ -48,15 +66,15 @@ def get_degree_distribution(N,k_over_2,beta,kmax=None):
 
     pS, pL = get_connection_probabilities(N,k_over_2,beta)
 
-    B_short = binom(k, pS)
-    B_long = binom(N-1-k, pL)
+    B_short = binom(k, pS).pmf
+    B_long = binom(N-1-k, pL).pmf
 
     ks = np.arange(kmax+1)
-    Pk = np.zeros_like(ks)
+    Pk = np.array(np.zeros_like(ks), dtype=float)
 
     for _k in ks:
         _P_k = 0.0
-        for kS in range(min(k,_k)):
+        for kS in range(min(k,_k)+1):
             _P_k += B_short(kS) * B_long(_k-kS)
         Pk[_k] = _P_k
 
