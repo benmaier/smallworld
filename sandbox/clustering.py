@@ -10,12 +10,12 @@ from smallworld.tools import get_number_of_unique_triangles_for_each_node
 
 from time import time
 
-N = 21
+N = 301
 k_over_2 = 2
 
-betas = np.logspace(-3,0,10)
+betas = np.logspace(-4,0,10)
 
-N_meas = 10000
+N_meas = 1000
 
 mean_two_stars = []
 mean_triangles = []
@@ -59,7 +59,7 @@ T = expected_number_of_unique_triangles_per_node(N, k_over_2, betas)
 pl.plot(betas, T,lw=1,c='k')
 
 pl.xscale('log')
-pl.yscale('log')
+#pl.yscale('log')
 pl.xlabel(r'$\beta$')
 pl.ylabel('expected number of triangles per node')
 
@@ -67,7 +67,7 @@ pl.figure()
 pl.plot(betas, mean_triangles/mean_two_stars,'s',mfc='w')
 pl.plot(betas, T/S,lw=1,c='k')
 pl.xscale('log')
-pl.yscale('log')
+#pl.yscale('log')
 pl.xlabel(r'$\beta$')
 pl.ylabel('clustering coefficient')
 
