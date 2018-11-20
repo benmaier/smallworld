@@ -25,7 +25,7 @@ def get_largest_component(G):
 
 def get_number_of_unique_two_stars(G):
     k = np.array([ d[1] for d in G.degree() ], dtype=float)
-    num = k*(k-1.0))/2.0
+    num = k*(k-1.0)/2.0
     return num
 
 def get_number_of_unique_two_stars_per_node(G):

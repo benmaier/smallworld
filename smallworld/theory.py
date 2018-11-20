@@ -103,8 +103,53 @@ def get_degree_variance(N,k_over_2,beta):
     return binomial_variance(k, pS) + binomial_variance(N-1-k, pL)
 
 
-def number_of_triangles(N,k_over_2,beta):
+def expected_number_of_unique_triangles_per_node(N,k_over_2,beta):
 
-    assert_parameters(N,k_over_2,beta)
+    if type(beta) == np.ndarray:
+        pS, pL = get_connection_probability_arrays(N, k_over_2, beta)
+    else:
+        pS, pL = get_connection_probabilities(N,k_over_2,beta)
 
-    # TODO
+    N = int(N)
+    k = int(2*k_over_2)
+
+    if N % 2 == 0:
+        raise ValueError("This currently only works for odd number of nodes N")
+ 
+    R = k_over_2
+    L = (N-1) // 2
+ 
+    big_triangle = (R**2 - R)/2 + R
+    small_triangle = (R**2 - R)/2
+    S3 = small_triangle * 3
+    S2L = 3 * big_triangle
+    SL2 = 2 * (small_triangle +(L-2*R) * R) +\
+          big_triangle +\
+          2*(L-R)*R +\
+          (2*R+1)*(L-R) - 2*big_triangle - (L-R) 
+    L3 = (L-R)**2 - ((2*R+1)*(L-R) - 2*big_triangle) +\
+         (L-R)**2 - big_triangle
+ 
+    return S3 * pS**3 + S2L * pS**2*pL + SL2 * pS*pL**2 + L3 * pL**3
+
+def expected_number_of_unique_two_stars_per_node(N,k_over_2,beta):
+
+    if type(beta) == np.ndarray:
+        pS, pL = get_connection_probability_arrays(N, k_over_2, beta)
+    else:
+        pS, pL = get_connection_probabilities(N,k_over_2,beta)
+
+    N = int(N)
+    k = int(2*k_over_2)
+
+    if N % 2 == 0:
+        raise ValueError("This currently only works for odd number of nodes N")
+ 
+    R = k_over_2
+    L = (N-1) // 2
+ 
+    S2 = (R**2 - R) + R**2
+    SL = 4 * (L-R) * R
+    L2 = ((L-R)**2 - (L-R)) + (L-R)**2
+ 
+    return S2 * pS**2 + SL * pS*pL + L2 * pL**2

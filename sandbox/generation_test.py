@@ -20,11 +20,11 @@ def get_counter_hist(ks):
 
     return k, P
 
-N = 300
+N = 15
 k_over_2 = 3
 beta = 0.5
 
-N_meas = 100
+N_meas = 10000
 
 ks_fast = []
 ks_slow = []
