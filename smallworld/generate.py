@@ -1,5 +1,5 @@
 """
-Generate small-world networks according to the model.
+Generate small-world networks according to the modified model.
 """
 
 import networkx as nx
