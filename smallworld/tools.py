@@ -5,6 +5,8 @@ Various handy things.
 import numpy as np
 import networkx as nx
 
+import scipy.sparse as sprs
+
 
 def assert_parameters(N,k_over_2,beta):
     """Assert that `N` is integer, `k_over_2` is integer and `0 <= beta <= 1`"""
@@ -46,6 +48,29 @@ def get_number_of_unique_triangles_for_each_node(G):
 def get_number_of_unique_triangles_per_node(G):
 
     return np.mean(get_number_of_unique_triangles_for_each_node(G))
+
+def get_sparse_matrix_from_rows_and_cols(N, rows, cols):
+
+    A = sprs.csc_matrix((np.ones_like(rows),(rows,cols)), shape=(N,N),dtype=float)
+
+    return A
+
+def get_random_walk_eigenvalue_gap(A,maxiter=10000):
+
+    W = A.copy()
+    degree = np.array(W.sum(axis=1),dtype=float).flatten()
+
+    for c in range(W.shape[1]):
+        W.data[W.indptr[c]:W.indptr[c+1]] /= degree[c]
+
+    lambda_max,_ = sprs.linalg.eigs(W,k=3,which='LR',maxiter=maxiter)
+    lambda_max = np.abs(lambda_max)
+    ind_zero = np.argmax(lambda_max)
+    lambda_1 = lambda_max[ind_zero]
+    lambda_max2 = np.delete(lambda_max,ind_zero)
+    lambda_2 = max(lambda_max2)
+
+    return 1 - lambda_2.real
 
 if __name__ == "__main__":
     from time import time

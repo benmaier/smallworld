@@ -131,12 +131,15 @@ def expected_number_of_unique_triangles_per_node(N,k_over_2,beta):
     small_triangle = (R**2 - R)/2
     S3 = small_triangle * 3
     S2L = 3 * big_triangle
-    SL2 = 2 * (small_triangle +(L-2*R) * R) +\
+    SL2 = 2 * ((L-R)*R - big_triangle) +\
           big_triangle +\
           2*(L-R)*R +\
-          (2*R+1)*(L-R) - 2*big_triangle - (L-R) 
-    L3 = (L-R)**2 - ((2*R+1)*(L-R) - 2*big_triangle) +\
+          2*((L-1)*R - big_triangle)
+          
+    L3 = (L-R)**2 - (2*((L-1)*R - big_triangle)) - (L-R) +\
          (L-R)**2 - big_triangle
+
+    print("whole area =", S3 + S2L + SL2 + L3)
  
     return S3 * pS**3 + S2L * pS**2*pL + SL2 * pS*pL**2 + L3 * pL**3
 
@@ -161,7 +164,12 @@ def expected_number_of_unique_two_stars_per_node(N,k_over_2,beta):
     SL = 4 * (L-R) * R
     L2 = ((L-R)**2 - (L-R)) + (L-R)**2
  
+    print("whole area =", S2 + SL + L2)
     return S2 * pS**2 + SL * pS*pL + L2 * pL**2
+
+def expected_clustering(N,k_over_2,beta):
+
+    return expected_number_of_unique_triangles_per_node(N,k_over_2,beta) / expected_number_of_unique_two_stars_per_node(N,k_over_2,beta)
 
 def get_effective_medium_eigenvalue_gap_from_matrix(N,k_over_2,beta):
 
@@ -174,8 +182,8 @@ def get_effective_medium_eigenvalue_gap_from_matrix(N,k_over_2,beta):
     k = int(2*k_over_2)
 
 
-    P = np.array([0.0] + [pS]*k_over_2 + [pL]*(N-1-k) + [pS]*k_over_2)
-    P = circulant(P) / k
+    P = np.array([0.0] + [pS]*k_over_2 + [pL]*(N-1-k) + [pS]*k_over_2) / k
+    P = circulant(P)
 
 
     omega = np.sort(np.linalg.eigvalsh(P))
@@ -200,4 +208,5 @@ def get_effective_medium_eigenvalue_gap(N,k_over_2,beta):
     omega_N_m_1 = pS/k * C - pL/k * (1+C)
 
     return 1-omega_N_m_1
+
 
