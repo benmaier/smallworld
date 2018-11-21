@@ -164,7 +164,7 @@ def expected_number_of_unique_two_stars_per_node(N,k_over_2,beta):
     SL = 4 * (L-R) * R
     L2 = ((L-R)**2 - (L-R)) + (L-R)**2
  
-    print("whole area =", S2 + SL + L2)
+    #print("whole area =", S2 + SL + L2)
     return S2 * pS**2 + SL * pS*pL + L2 * pL**2
 
 def expected_clustering(N,k_over_2,beta):
