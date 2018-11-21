@@ -139,7 +139,7 @@ def expected_number_of_unique_triangles_per_node(N,k_over_2,beta):
     L3 = (L-R)**2 - (2*((L-1)*R - big_triangle)) - (L-R) +\
          (L-R)**2 - big_triangle
 
-    print("whole area =", S3 + S2L + SL2 + L3)
+    #print("whole area =", S3 + S2L + SL2 + L3)
  
     return S3 * pS**3 + S2L * pS**2*pL + SL2 * pS*pL**2 + L3 * pL**3
 
