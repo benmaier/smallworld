@@ -205,8 +205,7 @@ def get_effective_medium_eigenvalue_gap(N,k_over_2,beta):
     j = 1.0 + np.arange(k_over_2)
     C = 2 * np.cos(2.0*np.pi/N*j).sum()
 
-    omega_N_m_1 = pS/k * C - pL/k * (1+C)
-
-    return 1-omega_N_m_1
+    return ( 1 - (C - beta * (1+C)) / (k + beta*(N-1-k)))
+    #return 1-omega_N_m_1
 
 
