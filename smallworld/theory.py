@@ -102,9 +102,12 @@ def get_degree_second_moment(N,k_over_2,beta):
 def get_degree_variance(N,k_over_2,beta):
     """Does what it says it does."""
 
-    assert_parameters(N,k_over_2,beta)
+    if type(beta) == np.ndarray:
+        pS, pL = get_connection_probability_arrays(N, k_over_2, beta)
+    else:
+        pS, pL = get_connection_probabilities(N,k_over_2,beta)
 
-    pS, pL = get_connection_probabilities(N,k_over_2,beta)
+    N = int(N)
     k = int(2*k_over_2)
 
     return binomial_variance(k, pS) + binomial_variance(N-1-k, pL)
@@ -129,17 +132,26 @@ def expected_number_of_unique_triangles_per_node(N,k_over_2,beta):
  
     big_triangle = (R**2 - R)/2 + R
     small_triangle = (R**2 - R)/2
-    S3 = small_triangle * 3
-    S2L = 3 * big_triangle
-    SL2 = 2 * ((L-R)*R - big_triangle) +\
+    _S3 = small_triangle * 3
+    _S2L = 3 * big_triangle
+    _SL2 = 2 * ((L-R)*R - big_triangle) +\
           big_triangle +\
           2*(L-R)*R +\
           2*((L-1)*R - big_triangle)
           
-    L3 = (L-R)**2 - (2*((L-1)*R - big_triangle)) - (L-R) +\
+    _L3 = (L-R)**2 - (2*((L-1)*R - big_triangle)) - (L-R) +\
          (L-R)**2 - big_triangle
 
     #print("whole area =", S3 + S2L + SL2 + L3)
+    S3 = k*(k-2)*3/8.
+    S2L = 3*k/8. * (k+2)
+    SL2 = (k/8.)*(12*N-26-11*k)
+    L3 = (1/8.) * (5*k**2 + k*(-12*N+26) + 4*(N**2-3*N+2))
+
+    #print(_S3, S3)
+    #print(_S2L, S2L)
+    #print(_SL2, SL2)
+    #print(_L3, L3)
  
     return S3 * pS**3 + S2L * pS**2*pL + SL2 * pS*pL**2 + L3 * pL**3
 
@@ -189,7 +201,7 @@ def get_effective_medium_eigenvalue_gap_from_matrix(N,k_over_2,beta):
     omega = np.sort(np.linalg.eigvalsh(P))
     omega_N_m_1 = omega[-2]
 
-    return 1-omega_N_m_1
+    return 1 - omega_N_m_1
 
 def get_effective_medium_eigenvalue_gap(N,k_over_2,beta):
 
@@ -206,6 +218,3 @@ def get_effective_medium_eigenvalue_gap(N,k_over_2,beta):
     C = 2 * np.cos(2.0*np.pi/N*j).sum()
 
     return ( 1 - (C - beta * (1+C)) / (k + beta*(N-1-k)))
-    #return 1-omega_N_m_1
-
-
