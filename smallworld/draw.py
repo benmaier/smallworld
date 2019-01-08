@@ -161,9 +161,9 @@ def draw_network(G, k_over_2, R=10,focal_node=None, ax=None):
 if __name__ == "__main__":
     from smallworld import get_smallworld_graph
 
-    N = 21
+    N = 50
     k_over_2 = 2
-    beta = 0.05
+    beta = 0.01
 
     focal_node = 0
 
