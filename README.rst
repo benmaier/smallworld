@@ -1,14 +1,13 @@
 smallworld
 ==========
 
-| Generate and analyze small-world networks according to the revised
-Watts-Strogatz model where the randomization
-| at *β* = 1 is truly equal to the Erdős-Rényi network model.
+Generate and analyze small-world networks according to the revised
+Watts-Strogatz model where the randomization at *β* = 1 is truly equal to the Erdős-Rényi network model.
 
-The Watts-Strogatz model each node is asked to rewire its *k*/2
-rightmost edges with probality *β*. This means thaeach node has halways
+In the Watts-Strogatz model each node rewires its *k*/2
+rightmost edges with probality *β*. This means that each node has halways
 minimum degree *k*/2. Also, at *β* = 1, each edge has been rewired.
-Hence the probability of it existing is 0, contrary to the ER model.
+Hence the probability of it existing is smaller than *k*/(*N*-1), contrary to the ER model.
 
 In the adjusted model, each pair of nodes is connected with a certain
 connection probability. If the lattice distance between the potentially
@@ -62,6 +61,7 @@ to the model described above.
     pl.subplots_adjust(wspace=0.3)
     pl.show()
 
-|visualization example|
+.. figure:: https://github.com/benmaier/smallworld/raw/master/sandbox/small_worlds.png
+    :alt: visualization example
 
-.. |visualization example| image:: https://github.com/benmaier/smallworld/raw/master/sandbox/small_worlds.png
+    visualization example
