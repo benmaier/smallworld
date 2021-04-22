@@ -20,8 +20,7 @@ def assert_parameters(N,k_over_2,beta):
 def get_largest_component(G):
     """Return the largest connected component of graph `G`."""
 
-    subgraphs = nx.connected_component_subgraphs(G,copy=False)
-    new_G = max(subgraphs, key=len)
+    new_G = max([G.subgraph(c) for c in nx.connected_components(G)], key=len)
     G = nx.convert_node_labels_to_integers(new_G)
 
     return G
@@ -58,6 +57,7 @@ def get_sparse_matrix_from_rows_and_cols(N, rows, cols):
 def get_random_walk_eigenvalue_gap(A,maxiter=10000):
 
     W = A.copy()
+    W = W.astype(float)
     degree = np.array(W.sum(axis=1),dtype=float).flatten()
 
     for c in range(W.shape[1]):

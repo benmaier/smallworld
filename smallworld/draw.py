@@ -8,7 +8,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as pl
 
 #def plot_edge(ax,N,u,v,phis,color=None):
-colors = [  
+colors =  [
             '#666666',
             '#1b9e77',
             '#e7298a'
@@ -42,7 +42,7 @@ def is_shortrange(i,j,N,k_over_2):
 
     return distance <= k_over_2 or N-distance <= k_over_2
 
-def draw_network(G, k_over_2, R=10,focal_node=None, ax=None):
+def draw_network(G, k_over_2, R=10,focal_node=None, ax=None,markersize=None,linewidth=1.0,linkcolor=None):
     """
     Draw a small world network.
 
@@ -74,12 +74,12 @@ def draw_network(G, k_over_2, R=10,focal_node=None, ax=None):
 
     if focal_node is None:
         non_focal_alpha = 1
-        focal_lw = 1.0
-        non_focal_lw = 1.0
+        focal_lw = linewidth*1.0
+        non_focal_lw = linewidth*1.0
     else:
         non_focal_alpha = 0.6
-        focal_lw = 1.5
-        non_focal_lw = 1.0
+        focal_lw = linewidth*1.5
+        non_focal_lw = linewidth*1.0
 
 
     N = G_.number_of_nodes()
@@ -94,7 +94,9 @@ def draw_network(G, k_over_2, R=10,focal_node=None, ax=None):
     points[:,1] = y
     origin = np.zeros((2,))
 
-    col = colors
+    col = list(colors)
+    if linkcolor is not None:
+        col[0] = linkcolor
 
 
     ax.axis('equal')
@@ -154,7 +156,7 @@ def draw_network(G, k_over_2, R=10,focal_node=None, ax=None):
 
         ax.plot(these_x, these_y,c=this_color,alpha=this_alpha,lw=this_lw)
 
-    ax.plot(x,y,'o',c='k')
+    ax.plot(x,y,'o',c='k',mec='#ffffff',ms=markersize)
 
     return ax
 
