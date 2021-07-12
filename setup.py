@@ -18,7 +18,7 @@ setup(
     setup_requires = [
             ],
     install_requires = [
-                'networkx>=2.0',
+                'networkx>=2.4',
                 'numpy>=1.14',
                 'scipy>=1.1',
             ],
